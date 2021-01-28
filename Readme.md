@@ -1,5 +1,6 @@
 # Xendit Coding Exercise
 # this is orignal 
+# check both file change add line 1
 The goal of these exercises are to assess your proficiency in software engineering that is related to the daily work that we do at Xendit. Please follow the instructions below to complete the assessment.
 
 ## Setup
