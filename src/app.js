@@ -6,6 +6,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const path = require('path');
+// __dirname = path.resolve();
 
 module.exports = (db) => {
 
