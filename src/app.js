@@ -6,14 +6,13 @@ const app = express();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const path = require('path');
-// __dirname = path.resolve();
+
 
 module.exports = (db) => {
 
     // adding document page
     app.get('/document',function(req,res){   
         res.sendFile(path.join(__dirname,'../pages/document.html'));
-        
     });
     // adding document page
 
