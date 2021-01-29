@@ -5,10 +5,19 @@ const app = express();
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
+const path = require('path');
 
 module.exports = (db) => {
-    app.get('/health', (req, res) => res.send('Healthy'));
 
+    // adding document page
+    app.get('/document',function(req,res){   
+        res.sendFile(path.join(__dirname,'../pages/document.html'));
+        
+    });
+    // adding document page
+
+    app.get('/health', (req, res) => res.send('Healthy'));
+    
     app.post('/rides', jsonParser, (req, res) => {
         const startLatitude = Number(req.body.start_lat);
         const startLongitude = Number(req.body.start_long);
