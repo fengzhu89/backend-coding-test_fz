@@ -25,7 +25,8 @@
     "nyc": "^15.1.0",
     "pre-push": "^0.1.1",
     "should": "^13.2.3",
-    "sqlite3": "^4.0.6"
+    "sqlite3": "^4.0.6",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "eslint": "^7.18.0",
