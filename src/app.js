@@ -9,11 +9,11 @@ const path = require('path');
 
 
 module.exports = (db) => {
-    app.use(express.static(__dirname + '/'));
-    app.use(bodyParser.urlencoded({extend:true}));
+    // app.use(express.static(__dirname + '/'));
+    // app.use(bodyParser.urlencoded({extend:true}));
     app.engine('html', require('ejs').renderFile);
-    app.set('view engine', 'html');
-    app.set('views', __dirname);
+    // app.set('view engine', 'html');
+    // app.set('views', __dirname);
     // adding document page
     app.get('/document',function(req,res){   
         res.sendFile(path.join(__dirname,'../pages/document.html'));
