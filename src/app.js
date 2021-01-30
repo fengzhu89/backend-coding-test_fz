@@ -9,7 +9,11 @@ const path = require('path');
 
 
 module.exports = (db) => {
-
+    app.use(express.static(__dirname + '/'));
+    app.use(bodyParser.urlencoded({extend:true}));
+    app.engine('html', require('ejs').renderFile);
+    app.set('view engine', 'html');
+    app.set('views', __dirname);
     // adding document page
     app.get('/document',function(req,res){   
         res.sendFile(path.join(__dirname,'../pages/document.html'));
@@ -86,7 +90,6 @@ module.exports = (db) => {
                         message: 'Unknown error'
                     });
                 }
-
                 res.send(rows);
             });
         });
@@ -109,8 +112,9 @@ module.exports = (db) => {
                     message: 'Could not find any rides'
                 });
             }
-
-            res.send(rows);
+           
+            res.render('../pages/rides.html', {msg:JSON.stringify(rows)});
+          
         });
     });
 
