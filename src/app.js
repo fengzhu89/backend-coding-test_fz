@@ -18,6 +18,16 @@ module.exports = (db) => {
              });
         });
     }
+
+    async function db_one(query,params){
+        return new Promise(function(resolve,reject){
+            db.all(query,params, function(err,rows){
+               if(err){return reject(err);}
+               resolve(rows);
+             });
+        });
+    }
+
     async function db_run(query,params){
         return new Promise(function(resolve,reject){
             db.run(query,params, function(err){
@@ -91,7 +101,7 @@ module.exports = (db) => {
         
         try{
             var lastID =  await db_run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)',values);
-            var rows = await db_all(`SELECT * FROM Rides WHERE rideID='${lastID}'`);
+            var rows = await db_one('SELECT * FROM Rides WHERE rideID = ?', lastID);
             res.send(rows);
         }catch (error){
             logger.log('error','SERVER_ERROR, Unknown error');
@@ -125,7 +135,7 @@ module.exports = (db) => {
 
     app.get('/rides/:id', async  (req, res) => {
         try{
-            var rows = await db_all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`);
+            var rows = await db_one('SELECT * FROM Rides WHERE rideID = ?',req.params.id);
             if (rows.length === 0) {
                 logger.log('info','Could not find any rides');
                 return res.send({
