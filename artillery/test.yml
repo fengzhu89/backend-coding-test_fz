@@ -1,5 +1,5 @@
 config:
-  target: 'http://192.168.8.29:8010/'
+  target: 'http://192.168.8.29:8010'
   phases:
     - duration: 30
       arrivalRate: 100
@@ -36,7 +36,7 @@ scenarios:
         url: "/rides"
     - get: 
         url: "/rides/{{ id }}"
-  - name: "test GET /health"
-    flow:
     - get:
         url: "/health"
+    - get:
+        url: "/document"

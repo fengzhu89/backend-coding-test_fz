@@ -4,12 +4,12 @@ module.exports = {
         "commonjs": true,
         "es2021": true
     },
-    // "extends": "eslint:recommended",
+    "extends": ['plugin:prettier/recommended',],
     "parserOptions": {
         "ecmaVersion": 12
     },
     "rules": {
         "semi": ["error", "always"],
-        "quotes": ["error", "single"]   
+        "quotes": ["error", "double"],
     }
 };
