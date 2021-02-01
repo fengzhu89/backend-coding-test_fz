@@ -1,0 +1,42 @@
+config:
+  target: 'http://192.168.8.29:8010/'
+  phases:
+    - duration: 30
+      arrivalRate: 100
+  payload:
+    path: "data.csv"
+    fields:
+      - "rideID"
+      - "startLat"
+      - "startLong"
+      - "endLat"
+      - "endLong"
+      - "riderName"
+      - "driverName"
+      - "driverVehicle"
+      - "created"
+scenarios:
+  - name: "test POST /rides, GET /rides and GET /rides/:id"
+    flow:
+    - post:
+        url: "/rides"
+        json:
+          rideID: "{{ rideID }}"
+          startLat: "{{ startLat }}"
+          startLong: "{{ startLong }}"
+          endLat: "{{ endLat }}"
+          endLong: "{{ endLong }}"
+          riderName: "{{ riderName }}"
+          driverName: "{{ driverName }}"
+          created: "{{ created }}"
+        capture:
+          json: "$.result[0].rideID"
+          as: "id"
+    - get:
+        url: "/rides"
+    - get: 
+        url: "/rides/{{ id }}"
+  - name: "test GET /health"
+    flow:
+    - get:
+        url: "/health"
