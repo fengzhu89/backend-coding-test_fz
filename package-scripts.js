@@ -9,5 +9,16 @@ module.exports = {
       "artillery run ./artillery/test.yml",
       "forever stop index.js"
     ),
+    doc: {
+      description: 'Documenting the API.',
+      generate: {
+        description: 'Generate Documentation files',
+        script: 'apidoc -i src',
+      },
+      deploy: {
+        description: 'Deploy the docs to surge.',
+        script: series('nps doc.generate', 'surge ./doc'),
+      },
+    }
   },
 };

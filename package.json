@@ -9,7 +9,9 @@
   "scripts": {
     "start": "nps start",
     "test": "nps test",
-    "test:load": "nps load"
+    "test:load": "nps load",
+    "doc:generate": "nps doc.generate",
+    "doc:deploy": "nps doc.deploy"
   },
   "pre-push": [
     "test"
@@ -20,6 +22,7 @@
   "author": "Bo",
   "license": "ISC",
   "dependencies": {
+    "apidoc": "^0.26.0",
     "artillery": "^1.6.1",
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
@@ -27,6 +30,7 @@
     "eslint-config-prettier": "^7.2.0",
     "express": "^4.16.4",
     "forever": "^3.0.4",
+    "memory-cache": "^0.2.0",
     "nps": "^5.10.0",
     "nps-utils": "^1.7.0",
     "nyc": "^15.1.0",
@@ -34,6 +38,7 @@
     "prettier": "^2.2.1",
     "should": "^13.2.3",
     "sqlite3": "^4.0.6",
+    "surge": "^0.21.7",
     "winston": "^3.3.3"
   },
   "devDependencies": {

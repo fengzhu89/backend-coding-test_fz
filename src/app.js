@@ -6,6 +6,24 @@ const logger = require("../config/logger");
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 const path = require("path");
+const mcache = require("memory-cache");
+
+const cache = (duration) => {
+  return (req, res, next) => {
+    let key = "__express__" + req.originalUrl || req.url;
+    let cachedBody = mcache.get(key);
+    if (cachedBody) {
+      res.send(cachedBody);
+    } else {
+      res.sendResponse = res.send;
+      res.send = (body) => {
+        mcache.put(key, body, duration * 1000);
+        res.sendResponse(body);
+      };
+      next();
+    }
+  };
+};
 
 module.exports = (db) => {
   // sqlite3 does not support async/await then need to create an async function with a promise
@@ -45,12 +63,116 @@ module.exports = (db) => {
   // render rides.html page
   app.engine("html", require("ejs").renderFile);
 
-  // add host document page for task 1
-  app.get("/document", function (req, res) {
-    res.sendFile(path.join(__dirname, "../pages/document.html"));
+  // host document 
+  app.use(express.static("doc"));
+
+  /**
+     * @api {get} /health
+
+     * @apiDescription Get API Status
+     * @apiVersion 0.0.1
+     * @apiName Health Status
+     * @apiGroup Status
+     *
+     * @apiSuccess {String} Message
+  */
+
+  app.get("/health", cache(10), (req, res) => {
+    res.send("Healthy");
   });
 
-  app.get("/health", (req, res) => res.send("Healthy"));
+  /**
+   * @api {post} /rides Add new Ride
+   * @apiDescription Add new Ride
+   * @apiVersion 0.0.1
+   * @apiName Post Ride
+   * @apiGroup Ride
+   *
+   * @apiParam (Body) {Number} start_lat Ride Origin Latitude
+   * @apiParam (Body) {Number} start_long Ride Origin Longtitude
+   * @apiParam (Body) {Number} end_lat Ride Destination Latitude
+   * @apiParam (Body) {Number} end_long  Ride Destination Longtitude
+   * @apiParam (Body) {String} rider_name Rider Name
+   * @apiParam (Body) {String} driver_name Driver Name
+   * @apiParam (Body) {String} driver_vehicle Driver Vehicle
+   *
+   * @apiSuccess {Object[]} rides List of Rides
+   * @apiSuccess {Number} rides.rideID Rider ID
+   * @apiSuccess {Number} rides.startLat Ride Origin Latitude
+   * @apiSuccess {Number} rides.startLong Ride Origin Longtitude
+   * @apiSuccess {Number} rides.endLat Ride Destination Latitude
+   * @apiSuccess {Number} rides.endLong Ride Destination Longtitude
+   * @apiSuccess {String} rides.riderName Rider Name
+   * @apiSuccess {String} rides.driverName Driver Name
+   * @apiSuccess {String} rides.driverVehicle Driver Vehicle 
+   *
+   * @apiError (Error) {String} error_code Error Code
+   * @apiError (Error) {String} message Error Message
+   *
+   * @apiSuccessExample Success-Response:
+   *
+   * HTTP/1.1 200
+   *
+   * [
+   *   {
+   *      rideID: '1',
+   *      startLat: 1,
+   *      startLong: 2,
+   *      endLat: 3,
+   *      endLong: 4,
+   *      riderName: 'rider',
+   *      driverName: 'driver',
+   *      driverVehicle: 'cartype',
+   *   }
+   * ]
+   *
+   * @apiErrorExample {json} Invalid Origin Longtitude/Latitude
+   *
+   *  {
+   *    error_code: 'VALIDATION_ERROR'
+   *    message: '
+   *      Start latitude & longitude must be between -90 - 90 & -180 to 180 degrees respectively
+   *    '
+   *  }
+   *
+   *  @apiErrorExample {json} Invalid Destination Longtitude/Latitude
+   *
+   *  {
+   *    error_code: 'VALIDATION_ERROR'
+   *    message: '
+   *      End latitude & longitude must be between -90 - 90 & -180 to 180 degrees respectively
+   *    '
+   *  }
+   *
+   *  @apiErrorExample {json} Invalid Rider Name
+   *
+   *  {
+   *    error_code: 'VALIDATION_ERROR'
+   *    message: 'Rider name must be a non empty string
+   *  }
+   *
+   *  @apiErrorExample {json} Invalid Driver Name
+   *
+   *  {
+   *    error_code: 'VALIDATION_ERROR'
+   *    message: 'Driver name must be a non empty string
+   *  }
+   *
+   *  @apiErrorExample {json} Invalid Driver's Vehicle
+   *
+   *  {
+   *    error_code: 'VALIDATION_ERROR'
+   *    message: 'Vehicle type must be a non empty string
+   *  }
+   *
+   * @apiErrorExample {json} Server Error
+   *
+   *  {
+   *    error_code: 'SERVER_ERROR',
+   *    message: 'Unknown error'
+   *  }
+   *
+   */
 
   app.post("/rides", jsonParser, async (req, res) => {
     const startLatitude = Number(req.body.start_lat);
@@ -145,7 +267,58 @@ module.exports = (db) => {
     }
   });
 
-  app.get("/rides", async (req, res) => {
+  /**
+   * @api {get} /rides Get All Rides
+   * @apiDescription Get All Rides
+   * @apiVersion 0.0.1
+   * @apiName Get Rides
+   * @apiGroup Ride
+   *
+   * @apiSuccess {Object[]} rides List of Rides
+   * @apiSuccess {Number} rides.rideID Rider ID
+   * @apiSuccess {Number} rides.startLat Ride Origin Latitude
+   * @apiSuccess {Number} rides.startLong Ride Origin Longtitude
+   * @apiSuccess {Number} rides.endLat Ride Destination Latitude
+   * @apiSuccess {Number} rides.endLong Ride Destination Longtitude
+   * @apiSuccess {String} rides.riderName Rider Name
+   * @apiSuccess {String} rides.driverName Driver Name
+   * @apiSuccess {String} rides.driverVehicle Driver Vehicle 
+   *
+   * @apiError (Error) {String} error_code Error Code
+   * @apiError (Error) {String} message Error Message
+   *
+   * @apiSuccessExample Success-Response:
+   *
+   * HTTP/1.1 200
+   *
+   * [
+   *   {
+   *      rideID: '1',
+   *      startLat: 1,
+   *      startLong: 2,
+   *      endLat: 3,
+   *      endLong: 4,
+   *      riderName: 'rider',
+   *      driverName: 'driver',
+   *      driverVehicle: 'cartype',
+   *   }
+   * ]
+   *
+   * @apiErrorExample {json} Server Error
+   *
+   *  {
+   *    error_code: 'SERVER_ERROR'
+   *    message: 'Unknown error'
+   *  }
+   *
+   * @apiErrorExample {json} NO Data
+   *
+   *  {
+   *    error_code: 'RIDES_NOT_FOUND_ERROR',
+   *    message: 'Could not find any rides'
+   *  }
+   * */
+  app.get("/rides", cache(10), async (req, res) => {
     try {
       var rows = await db_all("SELECT * FROM Rides");
       if (rows.length === 0) {
@@ -164,8 +337,60 @@ module.exports = (db) => {
       });
     }
   });
-
-  app.get("/rides/:id", async (req, res) => {
+  /**
+   * @api {get} /rides/:id Get a Ride data
+   * @apiDescription Get a Ride data
+   * @apiVersion 0.0.1
+   * @apiName Get Ride
+   * @apiGroup Ride
+   *
+   * @apiParam {Number} id Ride ID
+   *
+   * @apiSuccess {Object[]} rides List of Rides
+   * @apiSuccess {Number} rides.rideID Rider ID
+   * @apiSuccess {Number} rides.startLat Ride Origin Latitude
+   * @apiSuccess {Number} rides.startLong Ride Origin Longtitude
+   * @apiSuccess {Number} rides.endLat Ride Destination Latitude
+   * @apiSuccess {Number} rides.endLong Ride Destination Longtitude
+   * @apiSuccess {String} rides.riderName Rider Name
+   * @apiSuccess {String} rides.driverName Driver Name
+   * @apiSuccess {String} rides.driverVehicle Driver Vehicle 
+   *
+   * @apiError (Error) {String} error_code Error Code
+   * @apiError (Error) {String} message Error Message
+   *
+   * @apiSuccessExample Success-Response:
+   *
+   * HTTP/1.1 200
+   *
+   * [
+   *   {
+   *      rideID: '1',
+   *      startLat: 1,
+   *      startLong: 2,
+   *      endLat: 3,
+   *      endLong: 4,
+   *      riderName: 'rider',
+   *      driverName: 'driver',
+   *      driverVehicle: 'cartype',
+   *   }
+   * ]
+   *
+   * @apiErrorExample {json} Server Error
+   *
+   *  {
+   *    error_code: 'SERVER_ERROR'
+   *    message: 'Unknown error'
+   *  }
+   *
+   * @apiErrorExample {json} NO Data
+   *
+   *  {
+   *    error_code: 'RIDES_NOT_FOUND_ERROR',
+   *    message: 'Could not find any rides'
+   *  }
+   */
+  app.get("/rides/:id", cache(10), async (req, res) => {
     try {
       var rows = await db_one(
         "SELECT * FROM Rides WHERE rideID = ?",
