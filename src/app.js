@@ -63,7 +63,7 @@ module.exports = (db) => {
   // render rides.html page
   app.engine("html", require("ejs").renderFile);
 
-  // host document 
+  // host document
   app.use(express.static("doc"));
 
   /**
@@ -104,7 +104,7 @@ module.exports = (db) => {
    * @apiSuccess {Number} rides.endLong Ride Destination Longtitude
    * @apiSuccess {String} rides.riderName Rider Name
    * @apiSuccess {String} rides.driverName Driver Name
-   * @apiSuccess {String} rides.driverVehicle Driver Vehicle 
+   * @apiSuccess {String} rides.driverVehicle Driver Vehicle
    *
    * @apiError (Error) {String} error_code Error Code
    * @apiError (Error) {String} message Error Message
@@ -282,7 +282,7 @@ module.exports = (db) => {
    * @apiSuccess {Number} rides.endLong Ride Destination Longtitude
    * @apiSuccess {String} rides.riderName Rider Name
    * @apiSuccess {String} rides.driverName Driver Name
-   * @apiSuccess {String} rides.driverVehicle Driver Vehicle 
+   * @apiSuccess {String} rides.driverVehicle Driver Vehicle
    *
    * @apiError (Error) {String} error_code Error Code
    * @apiError (Error) {String} message Error Message
@@ -354,7 +354,7 @@ module.exports = (db) => {
    * @apiSuccess {Number} rides.endLong Ride Destination Longtitude
    * @apiSuccess {String} rides.riderName Rider Name
    * @apiSuccess {String} rides.driverName Driver Name
-   * @apiSuccess {String} rides.driverVehicle Driver Vehicle 
+   * @apiSuccess {String} rides.driverVehicle Driver Vehicle
    *
    * @apiError (Error) {String} error_code Error Code
    * @apiError (Error) {String} message Error Message

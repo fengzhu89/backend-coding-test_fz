@@ -10,15 +10,15 @@ module.exports = {
       "forever stop index.js"
     ),
     doc: {
-      description: 'Documenting the API.',
+      description: "Documenting the API.",
       generate: {
-        description: 'Generate Documentation files',
-        script: 'apidoc -i src',
+        description: "Generate Documentation files",
+        script: "apidoc -i src",
       },
       deploy: {
-        description: 'Deploy the docs to surge.',
-        script: series('nps doc.generate', 'surge ./doc'),
+        description: "Deploy the docs to surge.",
+        script: series("nps doc.generate", "surge ./doc"),
       },
-    }
+    },
   },
 };
