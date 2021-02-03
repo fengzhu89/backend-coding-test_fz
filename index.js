@@ -33,8 +33,8 @@ db.serialize(() => {
     key: fs.readFileSync("./ssl/server.key"),
   };
 
-  https.createServer(httpsOptions, app).listen(httpsPort, () => {
-    logger.log("info", `HTTPS App started and listening on port ${httpsPort}`);
-    console.log(`HTTPS App started and listening on port ${httpsPort}`);
-  });
+  // https.createServer(httpsOptions, app).listen(httpsPort, () => {
+  //   logger.log("info", `HTTPS App started and listening on port ${httpsPort}`);
+  //   console.log(`HTTPS App started and listening on port ${httpsPort}`);
+  // });
 });

@@ -8,6 +8,7 @@ const jsonParser = bodyParser.json();
 const path = require("path");
 const mcache = require("memory-cache");
 
+// cache implementation to achieve p99 < 50ms during load test
 const cache = (duration) => {
   return (req, res, next) => {
     let key = "__express__" + req.originalUrl || req.url;

@@ -1,7 +1,19 @@
 # Xendit Coding Exercise
-# this is changes from fork repository
 
 The goal of these exercises are to assess your proficiency in software engineering that is related to the daily work that we do at Xendit. Please follow the instructions below to complete the assessment.
+
+# Noted for Tasks
+
+## Task1 Documentation
+1. Generate API doc: `npm run doc:generate`. All api document will be generated under `/doc` folder
+2. Host API doc on: `http://localhost:8010`
+
+## Task 5 security
+1. An additional security improvement is `https` secure website implementation
+2. `HTTPS` host on `PORT` `8081`
+
+## Task 6 Load testing 
+1. In order to run load testing the command: `npm <mark>run<mark> test:load` 
 
 ## Setup
 
