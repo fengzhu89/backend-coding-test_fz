@@ -128,7 +128,7 @@
         }
       ]
     },
-    "filename": "src/app.js",
+    "filename": "src/handlers/getRidesByIdHandler.js",
     "groupTitle": "Ride"
   },
   {
@@ -247,7 +247,7 @@
         }
       ]
     },
-    "filename": "src/app.js",
+    "filename": "src/handlers/getRidesHandler.js",
     "groupTitle": "Ride"
   },
   {
@@ -441,12 +441,12 @@
         }
       ]
     },
-    "filename": "src/app.js",
+    "filename": "src/handlers/postRideHandler.js",
     "groupTitle": "Ride"
   },
   {
     "type": "get",
-    "url": "/health",
+    "url": "health",
     "title": "",
     "description": "<p>Get API Status</p>",
     "version": "0.0.1",
@@ -465,7 +465,7 @@
         ]
       }
     },
-    "filename": "src/app.js",
+    "filename": "src/handlers/getStatusHandler.js",
     "groupTitle": "Status"
   }
 ]
